@@ -38,6 +38,13 @@ dependencies:
   flutter_svg: ^0.19.0
   # For launcher icons
   flutter_launcher_icons: ^0.7.4
+  # for temporary memory
+  shared_preferences: ^0.5.12+4
+  # For sending mails from flutter
+  flutter_email_sender: ^4.0.0
+  # For Validation
+  form_field_validator: ^1.0.1
+  
 
 dev_dependencies:
   flutter_test:

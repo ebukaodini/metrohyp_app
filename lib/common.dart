@@ -66,8 +66,9 @@ void message(BuildContext context, String message, {String title: 'Message'}) {
           scrollable: true,
           title: Row(
             children: [
-              Text("$title", style: TextStyle(color: Colors.lightBlueAccent)),
               Icon(Icons.info, color: Colors.lightBlueAccent),
+              SizedBox(width: 2.0),
+              Text("$title", style: TextStyle(color: Colors.lightBlueAccent)),
             ],
             mainAxisAlignment: MainAxisAlignment.start,
           ),
@@ -86,11 +87,9 @@ void success(BuildContext context, String message, {String title: 'Message'}) {
         scrollable: true,
         title: Row(
           children: [
+            Icon(Icons.done, color: Colors.green),
+            SizedBox(width: 2.0),
             Text("$title", style: TextStyle(color: Colors.green)),
-            Icon(
-              Icons.done,
-              color: Colors.green,
-            ),
           ],
           mainAxisAlignment: MainAxisAlignment.start,
         ),
@@ -109,8 +108,9 @@ void error(BuildContext context, String message, {String title: 'Error'}) {
         scrollable: true,
         title: Row(
           children: [
-            Text("$title", style: TextStyle(color: Colors.red)),
             Icon(Icons.error, color: Colors.red),
+            SizedBox(width: 2.0),
+            Text("$title", style: TextStyle(color: Colors.red)),
           ],
           mainAxisAlignment: MainAxisAlignment.start,
         ),

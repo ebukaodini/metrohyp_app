@@ -28,19 +28,21 @@ class LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/imgs/background_new.png"),
-            fit: BoxFit.cover
-          )
-        ),
+      body: Center(
+        // constraints: BoxConstraints.expand(),
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     image: AssetImage("assets/imgs/background_new.png"),
+        //     fit: BoxFit.cover
+        //   )
+        // ),
         child: Container(
           // width: MediaQuery.of(context).copyWith().size.width / 2,
-          margin: EdgeInsets.only(bottom: 300.0),
+          // margin: EdgeInsets.only(bottom: 300.0),
           child: Image.asset(
-            'assets/imgs/metrohyp_logo_128.png',),
+            'assets/imgs/metrohyp_logo.png',
+            width: 150,
+          ),
         )
       ),
     );
