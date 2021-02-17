@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class ChoosePlanState extends State<ChoosePlan> {
   String _selectedCountry = 'Nigeria';
 
   String _requestedService;
+  bool _noService = true;
 
   final _formKey = new GlobalKey<FormState>();
   final _formKey1 = new GlobalKey<FormState>();
@@ -70,12 +72,30 @@ class ChoosePlanState extends State<ChoosePlan> {
       _countries.add(country.toString());
     });
 
-    dynamic respbody =
-        '[{"platform":"Facebook","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Reposts","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Instagram","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Reposts","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Twitter","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Retweets","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Youtube","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Subscribers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Tiktok","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Reposts","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Audiomack","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Upvotes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]}]';
+    // dynamic respbody =
+    //     '[{"platform":"Facebook","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Reposts","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Instagram","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Reposts","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Twitter","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Retweets","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Youtube","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Subscribers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Tiktok","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Reposts","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Audiomack","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Upvotes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]}]';
 
-    _platforms = jsonDecode(respbody);
+    // _platforms = jsonDecode(respbody);
 
-    choosePlatform(_platforms[0]['platform'].toString().toLowerCase(), context);
+    getMetrohypData();
+
+    // choosePlatform(_platforms[0]['platform'].toString().toLowerCase(), context);
+  }
+
+  getMetrohypData() async {
+    Map<String, dynamic> respbody = await fetch(
+        context, "/api/get-everything.php",
+        method: "GET",
+        headers: {"auth-token": "d1762e1a7e38266c8717fe63c0716ae7fab2ca8a"});
+
+    if (respbody['status'] == true) {
+      _platforms = respbody['data'];
+      print(_platforms);
+
+      // choosePlatform(_platforms[0]['platform'].toString().toLowerCase(), context);
+    } else {
+      error(context, respbody['message']);
+    }
   }
 
   @override
@@ -285,149 +305,159 @@ class ChoosePlanState extends State<ChoosePlan> {
                     ],
                   ),
                 )),
-            Container(
-              width: MediaQuery.of(context).copyWith().size.width,
-              padding: EdgeInsets.all(10.0),
-              margin: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: _platformColor),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Choose Service:',
-                    textAlign: TextAlign.start,
-                    style:
-                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      margin: EdgeInsets.symmetric(vertical: 10.0),
-                      width: MediaQuery.of(context).copyWith().size.width,
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  color: _platformColor,
-                                  style: BorderStyle.solid))),
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (context) {
-                              return renderPlatformServices();
-                            },
-                          );
-                        },
-                        child: Text(
-                          _selectedService ?? 'Select $_platform Service',
+            _noService == false
+                ? Container(
+                    width: MediaQuery.of(context).copyWith().size.width,
+                    padding: EdgeInsets.all(10.0),
+                    margin: EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: _platformColor),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Choose Service:',
                           textAlign: TextAlign.start,
-                          style:
-                              TextStyle(fontSize: 20.0, color: _platformColor),
+                          style: TextStyle(
+                              fontSize: 20.0, fontWeight: FontWeight.bold),
                         ),
-                      )),
-                  Container(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      margin: EdgeInsets.symmetric(vertical: 10.0),
-                      width: MediaQuery.of(context).copyWith().size.width,
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  color: _platformColor,
-                                  style: BorderStyle.solid))),
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (context) {
-                              return renderPlatformServiceAmount();
-                            },
-                          );
-                        },
-                        child: Text(
-                          _requestedService ?? 'How Many $_selectedService',
-                          textAlign: TextAlign.start,
-                          maxLines: 2,
-                          overflow: TextOverflow.clip,
-                          style:
-                              TextStyle(fontSize: 20.0, color: _platformColor),
-                        ),
-                      )),
-                  Form(
-                      key: _formKey1,
-                      child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 10.0),
-                          child: TextFormField(
-                            controller: _link,
-                            autocorrect: true,
-                            textInputAction: TextInputAction.next,
-                            style: TextStyle(fontSize: 20.0),
-                            decoration: InputDecoration(
-                              hintText: 'https://...',
-                              labelText: 'Enter Account Username/Link',
-                              labelStyle: TextStyle(color: _platformColor),
-                              alignLabelWithHint: true,
-                              focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: _platformColor,
-                                      style: BorderStyle.solid)),
-                            ),
-                            validator: ((value) {
-                              if (value.isEmpty)
-                                return 'Username/Link cannot be empty';
-                              return null;
-                            }),
-                          ))),
-                ],
-              ),
-            ),
+                        Container(
+                            padding: EdgeInsets.symmetric(vertical: 10.0),
+                            margin: EdgeInsets.symmetric(vertical: 10.0),
+                            width: MediaQuery.of(context).copyWith().size.width,
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: _platformColor,
+                                        style: BorderStyle.solid))),
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (context) {
+                                    return renderPlatformServices();
+                                  },
+                                );
+                              },
+                              child: Text(
+                                _selectedService ?? 'Select $_platform Service',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    fontSize: 20.0, color: _platformColor),
+                              ),
+                            )),
+                        Container(
+                            padding: EdgeInsets.symmetric(vertical: 10.0),
+                            margin: EdgeInsets.symmetric(vertical: 10.0),
+                            width: MediaQuery.of(context).copyWith().size.width,
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: _platformColor,
+                                        style: BorderStyle.solid))),
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (context) {
+                                    return renderPlatformServiceAmount();
+                                  },
+                                );
+                              },
+                              child: Text(
+                                _requestedService ??
+                                    'How Many $_selectedService',
+                                textAlign: TextAlign.start,
+                                maxLines: 2,
+                                overflow: TextOverflow.clip,
+                                style: TextStyle(
+                                    fontSize: 20.0, color: _platformColor),
+                              ),
+                            )),
+                        Form(
+                            key: _formKey1,
+                            child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 10.0),
+                                child: TextFormField(
+                                  controller: _link,
+                                  autocorrect: true,
+                                  textInputAction: TextInputAction.next,
+                                  style: TextStyle(fontSize: 20.0),
+                                  decoration: InputDecoration(
+                                    hintText: 'https://...',
+                                    labelText: 'Enter Account Username/Link',
+                                    labelStyle:
+                                        TextStyle(color: _platformColor),
+                                    alignLabelWithHint: true,
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: _platformColor,
+                                            style: BorderStyle.solid)),
+                                  ),
+                                  validator: ((value) {
+                                    if (value.isEmpty)
+                                      return 'Username/Link cannot be empty';
+                                    return null;
+                                  }),
+                                ))),
+                      ],
+                    ),
+                  )
+                : Container(),
             Container(height: 10.0),
             FlatButton(
-                onPressed: () async {
-                  var vresp = _formKey.currentState.validate();
-                  var vresp1 = _formKey1.currentState.validate();
-                  if (vresp && vresp1) {
-                    // get values
-                    String firstname = _fname.text;
-                    String lastname = _lname.text;
-                    String telephone = _tel.text;
-                    String email = _email.text;
-                    String link = _link.text;
+                onPressed: _noService == true
+                    ? null
+                    : () async {
+                        var vresp = _formKey.currentState.validate();
+                        var vresp1 = _formKey1.currentState.validate();
+                        if (vresp && vresp1) {
+                          // get values
+                          String firstname = _fname.text;
+                          String lastname = _lname.text;
+                          String telephone = _tel.text;
+                          String email = _email.text;
+                          String link = _link.text;
 
-                    // store redundant values in sharedpreference
-                    final SharedPreferences prefs = await _prefs;
-                    prefs.setString('firstname', firstname);
-                    prefs.setString('lastname', lastname);
-                    prefs.setString('email', email);
-                    prefs.setString('telephone', telephone);
-                    prefs.setString('selectedCountry', _selectedCountry);
+                          // store redundant values in sharedpreference
+                          final SharedPreferences prefs = await _prefs;
+                          prefs.setString('firstname', firstname);
+                          prefs.setString('lastname', lastname);
+                          prefs.setString('email', email);
+                          prefs.setString('telephone', telephone);
+                          prefs.setString('selectedCountry', _selectedCountry);
 
-                    if (_selectedService == null) {
-                      error(context,
-                          'Please select a service for $_platform');
-                      return;
-                    }
+                          if (_selectedService == null) {
+                            error(context,
+                                'Please select a service for $_platform');
+                            return;
+                          }
 
-                    if (int.parse(_selectedServiceCount) == 0 ||
-                        int.parse(_selectedServiceCost) == 0) {
-                      error(context,
-                          'Please select your how much $_selectedService you want');
-                      return;
-                    }
+                          print(int.parse(_selectedServiceCount));
 
-                    // process payment $firstname $lastname $email $telephone
-                    _handleCheckout(
-                        context,
-                        email,
-                        (int.parse(_selectedServiceCost) * 100).toString(),
-                        link);
-                  } else {
-                    error(context, 'Enter valid data');
-                  }
-                },
+                          if (int.parse(_selectedServiceCount) == 0 ||
+                              int.parse(_selectedServiceCost) == 0) {
+                            error(context,
+                                'Please select how much $_platform $_selectedService you want');
+                            return;
+                          }
+
+                          // process payment $firstname $lastname $email $telephone
+                          _handleCheckout(
+                              context,
+                              email,
+                              (int.parse(_selectedServiceCost) * 100)
+                                  .toString(),
+                              link);
+                        } else {
+                          error(context, 'Enter valid data');
+                        }
+                      },
                 color: _metroColor,
+                disabledColor: _metroColor,
                 padding: EdgeInsets.symmetric(vertical: 20.0),
                 child: Text('Pay', style: TextStyle(fontSize: 18.0))),
             Container(height: 20.0),
@@ -523,24 +553,28 @@ class ChoosePlanState extends State<ChoosePlan> {
   }
 
   Future<void> requestService() async {
-    final Email email = Email(
-      body:
-          'I will like to request and make enquiries for .............. Social Media Verification package. My handle is .............. and my contact number is ...............',
-      subject: 'Requesting a Service',
-      recipients: ['metrohypcom@gmail.com'],
-      isHTML: false,
-    );
+    message(context, 'Please fill in your details before sending.', title: 'Notice');
+    Timer(Duration(seconds: 2), () async {
+      final Email email = Email(
+        body:
+            'I will like to request and make enquiries for .............. Social Media Verification package. My handle is .............. and my contact number is ${_tel.text ?? "..............."}',
+        subject: 'Requesting a Service',
+        recipients: ['metrohypcom@gmail.com'],
+        isHTML: false,
+      );
 
-    try {
-      await FlutterEmailSender.send(email);
-      Navigator.pop(context);
-      if (!mounted) return;
-      success(context,
-          'Your request was received. We will email or call you soon.');
-    } catch (error) {
-      if (!mounted) return;
-      error(context, error.toString());
-    }
+      try {
+        await FlutterEmailSender.send(email);
+        Navigator.pop(context);
+        if (!mounted) return;
+        success(context,
+            'Your request was received. We will email or call you soon.');
+      } catch (error) {
+        if (!mounted) return;
+        error(context, error.toString());
+      }
+    });
+
   }
 
   Future<void> contactUs() async {
@@ -782,7 +816,7 @@ class ChoosePlanState extends State<ChoosePlan> {
     _platformServicePricing.toList().forEach((service) {
       if (service['name'] == _selectedService) {
         // print(service);
-        service['pricing'].toList().forEach((pricing) {
+        service['cost'].toList().forEach((pricing) {
           // print(pricing);
           options.add(renderPlatformServiceCostsDialogOption(
               '${pricing['count']}', '${pricing['price']}'));
@@ -950,16 +984,30 @@ class ChoosePlanState extends State<ChoosePlan> {
 
     _platforms.toList().forEach((_platform) {
       if (_platform['platform'] == platform) {
-        _platform['services'].toList().forEach((_service) {
-          services.add(_service['name']);
-          pricing.add(_service);
-        });
+        if (_platform['services'].length > 0) {
+          setState(() {
+            _noService = false;
+          });
+          _platform['services'].toList().forEach((_service) {
+            services.add(_service['name']);
+            pricing.add(_service);
+          });
+        } else {
+          setState(() {
+            _noService = true;
+          });
+          Navigator.pop(context);
+          error(context,
+              "There are no services for $platform at the moment, please try again later.");
+          return;
+        }
       }
     });
 
     _platformServices = services;
     _platformServicePricing = pricing;
     _selectedService = _platformServices[0];
+    _selectedServiceCount = '0';
   }
 
   String _getReference(String userLink) {

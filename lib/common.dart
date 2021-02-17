@@ -4,7 +4,7 @@ import 'dart:convert';
 
 Future fetch(BuildContext context, String uri,
     {String method, dynamic body, dynamic headers}) async {
-  String baseUrl = "";
+  String baseUrl = "https://services.metrohyp.com";
   var response;
   switch (method) {
     case 'GET':
