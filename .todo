@@ -4,3 +4,4 @@ Metrohyp App
     ✔ Integrate paystack payment @done(21-02-05 09:08)
     ✔ Make sure the landing page background image is sharp @done(21-02-05 09:08)
     ✔ Make sure the width of the containers remain thesame accross different platforms @done(21-02-05 09:08)
+    ✔ link the app to the metrhyp backend service @done(21-02-17 23:55)

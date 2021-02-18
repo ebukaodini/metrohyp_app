@@ -10,6 +10,7 @@ import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChoosePlan extends StatefulWidget {
   @override
@@ -80,22 +81,6 @@ class ChoosePlanState extends State<ChoosePlan> {
     getMetrohypData();
 
     // choosePlatform(_platforms[0]['platform'].toString().toLowerCase(), context);
-  }
-
-  getMetrohypData() async {
-    Map<String, dynamic> respbody = await fetch(
-        context, "/api/get-everything.php",
-        method: "GET",
-        headers: {"auth-token": "d1762e1a7e38266c8717fe63c0716ae7fab2ca8a"});
-
-    if (respbody['status'] == true) {
-      _platforms = respbody['data'];
-      print(_platforms);
-
-      // choosePlatform(_platforms[0]['platform'].toString().toLowerCase(), context);
-    } else {
-      error(context, respbody['message']);
-    }
   }
 
   @override
@@ -466,7 +451,6 @@ class ChoosePlanState extends State<ChoosePlan> {
         ],
       ),
       endDrawer: Drawer(
-          // Odini Software
           child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
               child: Column(
@@ -504,22 +488,6 @@ class ChoosePlanState extends State<ChoosePlan> {
                   SizedBox(height: 15.0),
                   FlatButton(
                       onPressed: () {
-                        contactUs();
-                      },
-                      color: Color(0xFFFDE7C6),
-                      padding: EdgeInsets.symmetric(vertical: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Icon(Icons.message_outlined, size: 20.0),
-                          SizedBox(width: 5),
-                          Text('Contact Us', style: TextStyle(fontSize: 20.0))
-                        ],
-                      )),
-                  SizedBox(height: 15.0),
-                  FlatButton(
-                      onPressed: () {
                         Navigator.pop(context);
                         requestService();
                       },
@@ -536,6 +504,22 @@ class ChoosePlanState extends State<ChoosePlan> {
                         ],
                       )),
                   SizedBox(height: 15.0),
+                  FlatButton(
+                      onPressed: () {
+                        contactUs();
+                      },
+                      color: Color(0xFFFDE7C6),
+                      padding: EdgeInsets.symmetric(vertical: 15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Icon(Icons.message_outlined, size: 20.0),
+                          SizedBox(width: 5),
+                          Text('Contact Us', style: TextStyle(fontSize: 20.0))
+                        ],
+                      )),
+                  SizedBox(height: 15.0),
                   Container(
                     height: 1.0,
                     color: Colors.black,
@@ -543,17 +527,57 @@ class ChoosePlanState extends State<ChoosePlan> {
                   SizedBox(height: 15.0),
                   Text('Developed by'),
                   SizedBox(height: 2.0),
-                  SvgPicture.asset(
-                    'assets/imgs/odinisoftware.svg',
-                    width: 120.0,
+                  InkWell(
+                    onTap: () async {
+                      if (await canLaunch('https://flutter.dev')) {
+                        await launch(
+                          'https://flutter.dev',
+                          forceSafariVC: true,
+                          forceWebView: true,
+                          enableDomStorage: true,
+                        );
+                      } else {
+                        _showErrorSnackBar();
+                        // error(context, 'Could not launch the URL.');
+                      }
+                    },
+                    child: SvgPicture.asset(
+                      'assets/imgs/odinisoftware.svg',
+                      width: 120.0,
+                    ),
                   ),
                 ],
               ))),
     ));
   }
 
+  void _showErrorSnackBar() {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Oops... the URL couldn\'t be opened!'),
+      ),
+    );
+  }
+
+  getMetrohypData() async {
+    Map<String, dynamic> respbody = await fetch(
+        context, "/api/get-everything.php",
+        method: "GET",
+        headers: {"auth-token": "d1762e1a7e38266c8717fe63c0716ae7fab2ca8a"});
+
+    if (respbody['status'] == true) {
+      _platforms = respbody['data'];
+
+      choosePlatform(
+          _platforms[0]['platform'].toString().toLowerCase(), context);
+    } else {
+      error(context, respbody['message']);
+    }
+  }
+
   Future<void> requestService() async {
-    message(context, 'Please fill in your details before sending.', title: 'Notice');
+    message(context, 'Please fill in your details before sending.',
+        title: 'Notice');
     Timer(Duration(seconds: 2), () async {
       final Email email = Email(
         body:
@@ -574,7 +598,6 @@ class ChoosePlanState extends State<ChoosePlan> {
         error(context, error.toString());
       }
     });
-
   }
 
   Future<void> contactUs() async {

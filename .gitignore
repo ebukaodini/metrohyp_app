@@ -41,3 +41,5 @@ app.*.symbols
 app.*.map.json
 
 keys.txt
+
+android/key.properties

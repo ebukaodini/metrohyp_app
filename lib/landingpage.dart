@@ -29,16 +29,7 @@ class LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        // constraints: BoxConstraints.expand(),
-        // decoration: BoxDecoration(
-        //   image: DecorationImage(
-        //     image: AssetImage("assets/imgs/background_new.png"),
-        //     fit: BoxFit.cover
-        //   )
-        // ),
         child: Container(
-          // width: MediaQuery.of(context).copyWith().size.width / 2,
-          // margin: EdgeInsets.only(bottom: 300.0),
           child: Image.asset(
             'assets/imgs/metrohyp_logo.png',
             width: 150,
