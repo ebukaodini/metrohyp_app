@@ -477,7 +477,7 @@ class ChoosePlanState extends State<ChoosePlan> {
                       padding: EdgeInsets.symmetric(vertical: 15.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Icon(Icons.layers_rounded, size: 21.0),
                           SizedBox(width: 5),
@@ -495,7 +495,7 @@ class ChoosePlanState extends State<ChoosePlan> {
                       padding: EdgeInsets.symmetric(vertical: 15.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Icon(Icons.help_outline, size: 20.0),
                           SizedBox(width: 5),
@@ -512,7 +512,7 @@ class ChoosePlanState extends State<ChoosePlan> {
                       padding: EdgeInsets.symmetric(vertical: 15.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Icon(Icons.message_outlined, size: 20.0),
                           SizedBox(width: 5),
@@ -529,16 +529,16 @@ class ChoosePlanState extends State<ChoosePlan> {
                   SizedBox(height: 2.0),
                   InkWell(
                     onTap: () async {
-                      if (await canLaunch('https://flutter.dev')) {
+                      if (await canLaunch('https://odini.netlify.app')) {
                         await launch(
-                          'https://flutter.dev',
-                          forceSafariVC: true,
-                          forceWebView: true,
+                          'https://odini.netlify.app',
+                          // forceSafariVC: true,
+                          // forceWebView: true,
+                          enableJavaScript: true,
                           enableDomStorage: true,
                         );
                       } else {
-                        _showErrorSnackBar();
-                        // error(context, 'Could not launch the URL.');
+                        snackbar(context, 'Could not launch the URL https://odini.netlify.app');
                       }
                     },
                     child: SvgPicture.asset(
@@ -549,14 +549,6 @@ class ChoosePlanState extends State<ChoosePlan> {
                 ],
               ))),
     ));
-  }
-
-  void _showErrorSnackBar() {
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Oops... the URL couldn\'t be opened!'),
-      ),
-    );
   }
 
   getMetrohypData() async {

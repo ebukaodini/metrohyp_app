@@ -120,3 +120,11 @@ void error(BuildContext context, String message, {String title: 'Error'}) {
     },
   );
 }
+
+void snackbar(BuildContext context, String message) {
+  Scaffold.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+    ),
+  );
+}
