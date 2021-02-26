@@ -23,7 +23,7 @@ class ChoosePlanState extends State<ChoosePlan> {
   List<dynamic> _platformServices;
   List<dynamic> _platformServicePricing;
 
-  CheckoutMethod _method = CheckoutMethod.card;
+  CheckoutMethod _method = CheckoutMethod.selectable;
 
   String _platform = 'Facebook';
   dynamic _platformLogo = SvgPicture.asset(
@@ -64,7 +64,7 @@ class ChoosePlanState extends State<ChoosePlan> {
 
     // TODO: Get metrohyp paystack details
     PaystackPlugin.initialize(
-        publicKey: 'pk_test_24c22a9f195e11266eef0cbc7cccbeb48e5cf584');
+        publicKey: 'pk_live_f7990a559ad4ad8e2b3796ae467a02660ccde5aa');
 
     String countries =
         '["Afghanistan","Åland Islands","Albania","Algeria","American Samoa","AndorrA","Angola","Anguilla","Antarctica","Antigua and Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Bouvet Island","Brazil","British Indian Ocean Territory","Brunei Darussalam","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central African Republic","Chad","Chile","China","Christmas Island","Cocos (Keeling) Islands","Colombia","Comoros","Congo","Congo, The Democratic Republic of the","Cook Islands","Costa Rica","Cote D\'Ivoire","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands (Malvinas)","Faroe Islands","Fiji","Finland","France","French Guiana","French Polynesia","French Southern Territories","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guadeloupe","Guam","Guatemala","Guernsey","Guinea","Guinea-Bissau","Guyana","Haiti","Heard Island and Mcdonald Islands","Holy See (Vatican City State)","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran, Islamic Republic Of","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Korea, Democratic People\'S Republic of","Korea, Republic of","Kuwait","Kyrgyzstan","Lao People\'S Democratic Republic","Latvia","Lebanon","Lesotho","Liberia","Libyan Arab Jamahiriya","Liechtenstein","Lithuania","Luxembourg","Macao","Macedonia, The Former Yugoslav Republic of","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Martinique","Mauritania","Mauritius","Mayotte","Mexico","Micronesia, Federated States of","Moldova, Republic of","Monaco","Mongolia","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","Niue","Norfolk Island","Northern Mariana Islands","Norway","Oman","Pakistan","Palau","Palestinian Territory, Occupied","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Pitcairn","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russian Federation","RWANDA","Saint Helena","Saint Kitts and Nevis","Saint Lucia","Saint Pierre and Miquelon","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia and Montenegro","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Georgia and the South Sandwich Islands","Spain","Sri Lanka","Sudan","Suriname","Svalbard and Jan Mayen","Swaziland","Sweden","Switzerland","Syrian Arab Republic","Taiwan, Province of China","Tajikistan","Tanzania, United Republic of","Thailand","Timor-Leste","Togo","Tokelau","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Turks and Caicos Islands","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","United States Minor Outlying Islands","Uruguay","Uzbekistan","Vanuatu","Venezuela","Viet Nam","Virgin Islands, British","Virgin Islands, U.S.","Wallis and Futuna","Western Sahara","Yemen","Zambia","Zimbabwe"]';
@@ -113,7 +113,8 @@ class ChoosePlanState extends State<ChoosePlan> {
                   child: Image.asset(
                     'assets/imgs/metrohyp_logo_128.png',
                     fit: BoxFit.contain,
-                  )),
+                  )
+                ),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.menu, color: _metroColor),
@@ -458,8 +459,8 @@ class ChoosePlanState extends State<ChoosePlan> {
                 children: [
                   SizedBox(height: 20.0),
                   Center(
-                      child: Image.asset('assets/imgs/metrohyp_logo.png',
-                          width: 100.0, fit: BoxFit.contain)),
+                    child: Image.asset('assets/imgs/metrohyp_logo.png',
+                      width: 100.0, fit: BoxFit.contain)),
                   SizedBox(height: 30.0),
                   FlatButton(
                       onPressed: () {
@@ -525,26 +526,20 @@ class ChoosePlanState extends State<ChoosePlan> {
                     color: Colors.black,
                   ),
                   SizedBox(height: 15.0),
-                  Text('Developed by'),
-                  SizedBox(height: 2.0),
                   InkWell(
                     onTap: () async {
-                      if (await canLaunch('https://odini.netlify.app')) {
+                      if (await canLaunch('https://metrohyp.com.ng')) {
                         await launch(
-                          'https://odini.netlify.app',
-                          // forceSafariVC: true,
-                          // forceWebView: true,
+                          'https://metrohyp.com.ng',
                           enableJavaScript: true,
                           enableDomStorage: true,
                         );
                       } else {
-                        snackbar(context, 'Could not launch the URL https://odini.netlify.app');
+                        error(context,
+                            'Could not launch the URL https://metrohyp.com.ng');
                       }
                     },
-                    child: SvgPicture.asset(
-                      'assets/imgs/odinisoftware.svg',
-                      width: 120.0,
-                    ),
+                    child: Text("https://metrohyp.com.ng"),
                   ),
                 ],
               ))),
@@ -1044,6 +1039,9 @@ class ChoosePlanState extends State<ChoosePlan> {
       ..card = _getCardFromUI();
 
     charge.reference = _getReference(userLink);
+    charge.accessCode = DateTime.now().millisecondsSinceEpoch.toString();
+
+
 
     try {
       CheckoutResponse response = await PaystackPlugin.checkout(
@@ -1058,6 +1056,8 @@ class ChoosePlanState extends State<ChoosePlan> {
         ),
       );
 
+      print(response);
+
       if (response.status == true) {
         success(context,
             'You have successfully submitted request for $_selectedServiceCount $_selectedService on $_selectedPlatform. You would get a confirmation mail shortly.');
@@ -1065,8 +1065,8 @@ class ChoosePlanState extends State<ChoosePlan> {
         error(context, response.message);
       }
     } catch (e) {
-      error(context, "Please confirm your details");
-      rethrow;
+      error(context, e.toString()); // "Please confirm your details"
+      // rethrow;
     }
   }
 

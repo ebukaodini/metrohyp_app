@@ -46,6 +46,8 @@ dependencies:
   form_field_validator: ^1.0.1
   # For adding hyperlinks
   url_launcher: ^5.7.10
+  # For push notifications
+  onesignal_flutter: ^2.0.0
   
 
 dev_dependencies:
