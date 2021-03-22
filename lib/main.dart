@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:metrohyp/privacypolicy.dart';
+import 'package:metrohyp/termsandconditions.dart';
 
 import 'landingpage.dart';
 import 'chooseplan.dart';
@@ -41,6 +43,9 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => new LandingPage(),
         '/chooseplan': (BuildContext context) => new ChoosePlan(),
+        '/privacypolicy': (BuildContext context) => new PrivacyPolicy(),
+        '/termsandconditions': (BuildContext context) =>
+            new TermsAndConditions(),
       },
       initialRoute: '/',
     );

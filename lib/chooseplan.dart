@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:metrohyp/common.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
@@ -21,21 +21,18 @@ class ChoosePlanState extends State<ChoosePlan> {
   List<String> _countries = [];
   List<dynamic> _platforms;
   List<dynamic> _platformServices;
+  List<dynamic> _platformServicesDescriptions;
   List<dynamic> _platformServicePricing;
 
   CheckoutMethod _method = CheckoutMethod.selectable;
 
-  String _platform = 'Facebook';
-  dynamic _platformLogo = SvgPicture.asset(
-    'assets/imgs/facebook.svg',
-    width: 20.0,
-  );
-  Color _platformColor = Color.fromRGBO(59, 89, 152, 1.0);
+  String _platform = 'Select Platform';
+  Color _platformColor = Color(0xFF344F89);
   Color _metroColor = Color.fromRGBO(244, 163, 31, 1.0);
-  // Color _metroColor2 = Color.fromRGBO(244, 163, 25, 1.0);
 
-  String _selectedPlatform; // = 'facebook';
-  String _selectedService; // = 'Likes';
+  String _selectedPlatform;
+  String _selectedService;
+  String _selectedServiceDescription = 'No Description';
   String _selectedServiceCount = '0';
   String _selectedServiceCost = '0';
   String _selectedCountry = 'Nigeria';
@@ -73,14 +70,7 @@ class ChoosePlanState extends State<ChoosePlan> {
       _countries.add(country.toString());
     });
 
-    // dynamic respbody =
-    //     '[{"platform":"Facebook","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Reposts","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Instagram","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Reposts","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Twitter","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Retweets","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Youtube","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Subscribers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Tiktok","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Reposts","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]},{"platform":"Audiomack","services":[{"name":"Likes","pricing":[{"count":"100","price":"1000"},{"count":"200","price":"2000"},{"count":"300","price":"3000"},{"count":"400","price":"4000"},{"count":"500","price":"5000"}]},{"name":"Followers","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Comments","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"100","price":"4000"}]},{"name":"Shares","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Unlikes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]},{"name":"Upvotes","pricing":[{"count":"25","price":"1000"},{"count":"50","price":"2000"},{"count":"75","price":"3000"},{"count":"100","price":"4000"}]}]}]';
-
-    // _platforms = jsonDecode(respbody);
-
     getMetrohypData();
-
-    // choosePlatform(_platforms[0]['platform'].toString().toLowerCase(), context);
   }
 
   @override
@@ -113,8 +103,7 @@ class ChoosePlanState extends State<ChoosePlan> {
                   child: Image.asset(
                     'assets/imgs/metrohyp_logo_128.png',
                     fit: BoxFit.contain,
-                  )
-                ),
+                  )),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.menu, color: _metroColor),
@@ -137,7 +126,10 @@ class ChoosePlanState extends State<ChoosePlan> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _platformLogo,
+                  Image.asset(
+                    'assets/imgs/metrohyp_logo_128.png',
+                    width: 20.0,
+                  ),
                   Container(height: 10.0),
                   Text(
                       "Buy Likes, Comments and Views for $_platform on MetroHyp",
@@ -389,6 +381,11 @@ class ChoosePlanState extends State<ChoosePlan> {
                                     return null;
                                   }),
                                 ))),
+                        Text(
+                          '''\n$_selectedServiceDescription\n''',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(),
+                        )
                       ],
                     ),
                   )
@@ -422,7 +419,7 @@ class ChoosePlanState extends State<ChoosePlan> {
                             return;
                           }
 
-                          print(int.parse(_selectedServiceCount));
+                          // print(int.parse(_selectedServiceCount));
 
                           if (int.parse(_selectedServiceCount) == 0 ||
                               int.parse(_selectedServiceCost) == 0) {
@@ -453,19 +450,23 @@ class ChoosePlanState extends State<ChoosePlan> {
       ),
       endDrawer: Drawer(
           child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20.0),
-                  Center(
+        padding: EdgeInsets.symmetric(horizontal: 15.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.0),
+                Center(
                     child: Image.asset('assets/imgs/metrohyp_logo.png',
-                      width: 100.0, fit: BoxFit.contain)),
-                  SizedBox(height: 30.0),
-                  FlatButton(
-                      onPressed: () {
-                        // _scaffoldKey.currentState. closeEndDrawer();
-                        Navigator.pop(context);
+                        width: 100.0, fit: BoxFit.contain)),
+                SizedBox(height: 30.0),
+                FlatButton(
+                    onPressed: () {
+                      // _scaffoldKey.currentState. closeEndDrawer();
+                      Navigator.pop(context);
+                      try {
                         showDialog(
                           context: context,
                           barrierDismissible: true,
@@ -473,76 +474,104 @@ class ChoosePlanState extends State<ChoosePlan> {
                             return renderSelectPlatforms();
                           },
                         );
-                      },
-                      color: Color(0xFFFDE7C6),
-                      padding: EdgeInsets.symmetric(vertical: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.layers_rounded, size: 21.0),
-                          SizedBox(width: 5),
-                          Text('Select Platform',
-                              style: TextStyle(fontSize: 20.0))
-                        ],
-                      )),
-                  SizedBox(height: 15.0),
-                  FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        requestService();
-                      },
-                      color: Color(0xFFFDE7C6),
-                      padding: EdgeInsets.symmetric(vertical: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.help_outline, size: 20.0),
-                          SizedBox(width: 5),
-                          Text('Request a Service',
-                              style: TextStyle(fontSize: 20.0))
-                        ],
-                      )),
-                  SizedBox(height: 15.0),
-                  FlatButton(
-                      onPressed: () {
-                        contactUs();
-                      },
-                      color: Color(0xFFFDE7C6),
-                      padding: EdgeInsets.symmetric(vertical: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.message_outlined, size: 20.0),
-                          SizedBox(width: 5),
-                          Text('Contact Us', style: TextStyle(fontSize: 20.0))
-                        ],
-                      )),
-                  SizedBox(height: 15.0),
-                  Container(
-                    height: 1.0,
-                    color: Colors.black,
-                  ),
-                  SizedBox(height: 15.0),
-                  InkWell(
-                    onTap: () async {
-                      if (await canLaunch('https://metrohyp.com.ng')) {
-                        await launch(
-                          'https://metrohyp.com.ng',
-                          enableJavaScript: true,
-                          enableDomStorage: true,
-                        );
-                      } else {
-                        error(context,
-                            'Could not launch the URL https://metrohyp.com.ng');
+                      } catch (e) {
+                        error(context, 'No available platform');
                       }
                     },
-                    child: Text("https://metrohyp.com.ng"),
-                  ),
-                ],
-              ))),
+                    color: Color(0xFFFDE7C6),
+                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.layers_rounded, size: 21.0),
+                        SizedBox(width: 5),
+                        Text('Select Platform',
+                            style: TextStyle(fontSize: 20.0))
+                      ],
+                    )),
+                SizedBox(height: 15.0),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      requestService();
+                    },
+                    color: Color(0xFFFDE7C6),
+                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.help_outline, size: 20.0),
+                        SizedBox(width: 5),
+                        Text('Request a Service',
+                            style: TextStyle(fontSize: 20.0))
+                      ],
+                    )),
+                SizedBox(height: 15.0),
+                FlatButton(
+                    onPressed: () {
+                      contactUs();
+                    },
+                    color: Color(0xFFFDE7C6),
+                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.message_outlined, size: 20.0),
+                        SizedBox(width: 5),
+                        Text('Contact Us', style: TextStyle(fontSize: 20.0))
+                      ],
+                    )),
+                SizedBox(height: 15.0),
+                Container(
+                  height: 1.0,
+                  color: Colors.black,
+                ),
+                SizedBox(height: 15.0),
+                InkWell(
+                  onTap: () async {
+                    if (await canLaunch('https://metrohyp.com.ng')) {
+                      await launch(
+                        'https://metrohyp.com.ng',
+                        enableJavaScript: true,
+                        enableDomStorage: true,
+                      );
+                    } else {
+                      error(context,
+                          'Could not launch the URL https://metrohyp.com.ng');
+                    }
+                  },
+                  child: Text("https://metrohyp.com.ng"),
+                ),
+              ],
+            ),
+
+            // Link to the terms and condition
+            // Links to the Privacy policy
+            // And should hold notes on the refund policy
+
+            Expanded(
+              child: SizedBox(height: 15.0),
+            ),
+            InkWell(
+              onTap: () async {
+                Navigator.pushNamed(context, '/termsandconditions');
+              },
+              child: Text("Terms & Condition"),
+            ),
+            SizedBox(height: 15.0),
+            InkWell(
+              onTap: () async {
+                Navigator.pushNamed(context, '/privacypolicy');
+              },
+              child: Text("Privacy Policy"),
+            ),
+            SizedBox(height: 30.0),
+          ],
+        ),
+      )),
     ));
   }
 
@@ -555,8 +584,7 @@ class ChoosePlanState extends State<ChoosePlan> {
     if (respbody['status'] == true) {
       _platforms = respbody['data'];
 
-      choosePlatform(
-          _platforms[0]['platform'].toString().toLowerCase(), context);
+      choosePlatform(_platforms[0]['platform'], context);
     } else {
       error(context, respbody['message']);
     }
@@ -648,135 +676,47 @@ class ChoosePlanState extends State<ChoosePlan> {
   }
 
   SimpleDialog renderSelectPlatforms() {
-    return SimpleDialog(title: Text('Select Platform'), children: [
-      SimpleDialogOption(
-          onPressed: () {
-            choosePlatform('facebook', context);
-            Navigator.pop(context);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/imgs/facebook.svg',
-                    width: 20.0,
-                  ),
-                  Text('  Facebook'),
-                ],
-              ),
-              _selectedPlatform == 'facebook' ? Icon(Icons.check) : Container()
-            ],
-          )),
-      SimpleDialogOption(
-          onPressed: () {
-            choosePlatform('twitter', context);
-            Navigator.pop(context);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/imgs/twitter.svg',
-                    width: 20.0,
-                  ),
-                  Text('  Twitter'),
-                ],
-              ),
-              _selectedPlatform == 'twitter' ? Icon(Icons.check) : Container()
-            ],
-          )),
-      SimpleDialogOption(
-          onPressed: () {
-            choosePlatform('instagram', context);
-            Navigator.pop(context);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/imgs/instagram.svg',
-                    width: 20.0,
-                  ),
-                  Text('  Instagram'),
-                ],
-              ),
-              _selectedPlatform == 'instagram' ? Icon(Icons.check) : Container()
-            ],
-          )),
-      SimpleDialogOption(
-          onPressed: () {
-            choosePlatform('youtube', context);
-            Navigator.pop(context);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/imgs/youtube.svg',
-                    width: 20.0,
-                  ),
-                  Text('  Youtube'),
-                ],
-              ),
-              _selectedPlatform == 'youtube' ? Icon(Icons.check) : Container()
-            ],
-          )),
-      SimpleDialogOption(
-          onPressed: () {
-            choosePlatform('tiktok', context);
-            Navigator.pop(context);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/imgs/tiktok.svg',
-                    width: 20.0,
-                  ),
-                  Text('  TikTok'),
-                ],
-              ),
-              _selectedPlatform == 'tiktok' ? Icon(Icons.check) : Container()
-            ],
-          )),
-      SimpleDialogOption(
-          onPressed: () {
-            choosePlatform('audiomack', context);
-            Navigator.pop(context);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/imgs/audiomack.jpeg',
-                    width: 20.0,
-                  ),
-                  Text('  Audiomack'),
-                ],
-              ),
-              _selectedPlatform == 'audiomack' ? Icon(Icons.check) : Container()
-            ],
-          )),
-    ]);
+    List<Widget> platformDialogOptions = [];
+    try {
+      _platforms.forEach((platform) => {
+            platformDialogOptions.add(SimpleDialogOption(
+                onPressed: () {
+                  choosePlatform(platform['platform'], context);
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.indeterminate_check_box_rounded,
+                          color: _platformColor,
+                        ),
+                        SizedBox(width: 5),
+                        Text(platform['platform']),
+                      ],
+                    ),
+                    _selectedPlatform == platform['platform']
+                        ? Icon(Icons.check)
+                        : Container()
+                  ],
+                )))
+          });
+    } catch (e) {
+      throw new Exception('No available platform');
+    }
+    return SimpleDialog(
+        title: Text('Select Platform'), children: platformDialogOptions);
   }
 
   SimpleDialog renderPlatformServices() {
     List<SimpleDialogOption> options = [];
+    int count = 0;
     _platformServices.forEach((service) {
-      // print(service);
-      options.add(renderPlatformServicesDialogOption(service.toString()));
+      options.add(renderPlatformServicesDialogOption(service.toString(),
+          _platformServicesDescriptions[count] ?? 'No Description'));
+      count++;
     });
 
     return SimpleDialog(
@@ -842,48 +782,27 @@ class ChoosePlanState extends State<ChoosePlan> {
         children: options);
   }
 
-  SimpleDialogOption renderPlatformServicesDialogOption(String service) {
-    IconData serviceIcon;
-    switch (service) {
-      case 'Likes':
-        serviceIcon = Icons.thumb_up;
-        break;
-      case 'Followers':
-      case 'Subscribers':
-        serviceIcon = Icons.people_rounded;
-        break;
-      case 'Comments':
-        serviceIcon = Icons.mode_comment_rounded;
-        break;
-      case 'Shares':
-        serviceIcon = Icons.share;
-        break;
-      case 'Retweets':
-      case 'Upvotes':
-      case 'Reposts':
-        serviceIcon = Icons.repeat_sharp;
-        break;
-      case 'Unlikes':
-        serviceIcon = Icons.thumb_down;
-        break;
-      default:
-        serviceIcon = Icons.thumb_up;
-        break;
-    }
+  SimpleDialogOption renderPlatformServicesDialogOption(
+      String service, String description) {
+    // set the service description
     return SimpleDialogOption(
         onPressed: () {
-          setState(() => _selectedService = service);
+          setState(() {
+            _selectedService = service;
+            _selectedServiceDescription = description;
+          });
           _requestedService = null;
           Navigator.pop(context);
         },
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('$service', style: TextStyle(color: _platformColor)),
             Icon(
-              serviceIcon,
+              Icons.indeterminate_check_box_rounded,
               color: _platformColor,
             ),
+            SizedBox(width: 5),
+            Text('$service', style: TextStyle(color: _platformColor)),
           ],
         ));
   }
@@ -901,11 +820,15 @@ class ChoosePlanState extends State<ChoosePlan> {
           Navigator.pop(context);
         },
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text('$count $_selectedService',
-                style: TextStyle(color: _platformColor)),
-            Text('NGN $price', style: TextStyle(color: _platformColor))
+            Icon(
+              Icons.indeterminate_check_box_rounded,
+              color: _platformColor,
+            ),
+            SizedBox(width: 5),
+            Text('$count $_selectedService = NGN $price',
+                style: TextStyle(color: _platformColor))
           ],
         ));
   }
@@ -913,83 +836,16 @@ class ChoosePlanState extends State<ChoosePlan> {
   choosePlatform(String platform, BuildContext context) {
     // for the icon
     setState(() {
+      _platform = platform;
       _selectedPlatform = platform;
       _requestedService = null;
     });
-
-    switch (platform) {
-      case 'facebook':
-        setState(() {
-          _platform = 'Facebook';
-          _platformLogo = SvgPicture.asset(
-            'assets/imgs/facebook.svg',
-            width: 20.0,
-          );
-          _platformColor = Color.fromRGBO(52, 79, 137, 1.0);
-          loadPlatformServices('Facebook');
-        });
-        break;
-      case 'instagram':
-        setState(() {
-          _platform = 'Instagram';
-          _platformLogo = SvgPicture.asset(
-            'assets/imgs/instagram.svg',
-            width: 20.0,
-          );
-          _platformColor = Color.fromRGBO(221, 42, 123, 1.0);
-          loadPlatformServices('Instagram');
-        });
-        break;
-      case 'twitter':
-        setState(() {
-          _platform = 'Twitter';
-          _platformLogo = SvgPicture.asset(
-            'assets/imgs/twitter.svg',
-            width: 20.0,
-          );
-          _platformColor = Color.fromRGBO(73, 147, 203, 1.0);
-          loadPlatformServices('Twitter');
-        });
-        break;
-      case 'youtube':
-        setState(() {
-          _platform = 'Youtube';
-          _platformLogo = SvgPicture.asset(
-            'assets/imgs/youtube.svg',
-            width: 20.0,
-          );
-          _platformColor = Color.fromRGBO(200, 7, 7, 1.0);
-          loadPlatformServices('Youtube');
-        });
-        break;
-      case 'tiktok':
-        setState(() {
-          _platform = 'TikTok';
-          _platformLogo = SvgPicture.asset(
-            'assets/imgs/tiktok.svg',
-            width: 20.0,
-          );
-          _platformColor = Color.fromRGBO(163, 0, 49, 1.0);
-          loadPlatformServices('Tiktok');
-        });
-        break;
-      case 'audiomack':
-        setState(() {
-          _platform = 'Audiomack';
-          _platformLogo = Image.asset(
-            'assets/imgs/audiomack.jpeg',
-            width: 20.0,
-          );
-          _platformColor = Color.fromRGBO(39, 33, 27, 1.0);
-          loadPlatformServices('Audiomack');
-        });
-        break;
-      default:
-    }
+    loadPlatformServices(platform);
   }
 
   void loadPlatformServices(String platform) {
     List<dynamic> services = [];
+    List<dynamic> descriptions = [];
     List<dynamic> pricing = [];
 
     _platforms.toList().forEach((_platform) {
@@ -1000,6 +856,7 @@ class ChoosePlanState extends State<ChoosePlan> {
           });
           _platform['services'].toList().forEach((_service) {
             services.add(_service['name']);
+            descriptions.add(_service['description'] ?? 'No Description');
             pricing.add(_service);
           });
         } else {
@@ -1015,7 +872,9 @@ class ChoosePlanState extends State<ChoosePlan> {
     });
 
     _platformServices = services;
+    _platformServicesDescriptions = descriptions;
     _platformServicePricing = pricing;
+    // _selectedServiceDescription = _platformServices['description'] ?? 'No Desscription';
     _selectedService = _platformServices[0];
     _selectedServiceCount = '0';
   }
@@ -1040,8 +899,6 @@ class ChoosePlanState extends State<ChoosePlan> {
 
     charge.reference = _getReference(userLink);
     charge.accessCode = DateTime.now().millisecondsSinceEpoch.toString();
-
-
 
     try {
       CheckoutResponse response = await PaystackPlugin.checkout(
@@ -1079,52 +936,3 @@ class ChoosePlanState extends State<ChoosePlan> {
     );
   }
 }
-
-/*
-Facebook
-Instagram
-Twitter
-Youtube
-Tiktok
-Audiomack
-
-Fullname
-Email
-Phone number
-
-service
-Account username/link
-Amount
-Country
-
-Pay
-
-Likes
-Followers
-Subscribers
-Views
-Comments
-Shares
-Unlikes
-Reposts
-Retweets
-
-$platforms = [];
-$platforms[] = 'Facebook';       
-$platforms[] = 'Instagram';   
-$platforms[] = 'Twitter';
-$platforms[] = 'Youtube';
-$platforms[] = 'Tiktok';
-$platforms[] = 'Audiomack';
-
-$platform['Facebook']['services'] = ['Likes','Followers','Comments','Shares','Unlikes','Reposts'];
-$platform['Facebook']['services']['Likes]['input'] = 'Enter post link';
-$platform['Facebook']['services']['Followers]['input'] = 'Enter username';
-$platform['Facebook']['services']['Comments]['input'] = 'Enter username';
-$platform['Facebook']['services']['Shares]['input'] = 'Enter post link';
-$platform['Facebook']['services']['Unlikes]['input'] = 'Enter post link';
-$platform['Facebook']['services']['Reposts]['input'] = 'Enter post link';
-
-echo json_encode($platform);
-
-*/
