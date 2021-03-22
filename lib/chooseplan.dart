@@ -874,8 +874,8 @@ class ChoosePlanState extends State<ChoosePlan> {
     _platformServices = services;
     _platformServicesDescriptions = descriptions;
     _platformServicePricing = pricing;
-    // _selectedServiceDescription = _platformServices['description'] ?? 'No Desscription';
     _selectedService = _platformServices[0];
+    _selectedServiceDescription = descriptions[0] ?? 'No Desscription';
     _selectedServiceCount = '0';
   }
 
